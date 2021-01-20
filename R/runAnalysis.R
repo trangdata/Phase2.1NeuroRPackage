@@ -33,8 +33,6 @@
 #' @importFrom forcats fct_recode fct_reorder
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #'
-#' @examples
-#'
 runAnalysis <-
   function(mysite,
            mask_thres,

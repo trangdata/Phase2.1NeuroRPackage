@@ -35,6 +35,3 @@ NULL. Result files are written out to the `out_dir` directory.
 \description{
 Run analysis
 }
-\examples{
-
-}
