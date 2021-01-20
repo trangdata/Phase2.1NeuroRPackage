@@ -18,6 +18,7 @@ Imports:
   tibble,
   dplyr,
   rcartocolor,
+  purrr,
   devtools
 Remotes: jackwasey/icd
 Depends: 

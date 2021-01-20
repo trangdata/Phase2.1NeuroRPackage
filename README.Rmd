@@ -4,8 +4,7 @@ output: rmarkdown::github_document
 ---
 
 [![github-action-status](https://img.shields.io/github/workflow/status/trang1618/treeheatr/R-CMD-check?logo=github)](https://github.com/trang1618/treeheatr/actions)
-`r badger::badge_cran_download("badger", "grand-total", "blue")`
-`r badger::badge_doi("10.1093/bioinformatics/btaa662", "yellow")`
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -24,11 +23,14 @@ remotes::install_github('covidclinical/Phase2.1NeuroRPackage')
 
 ## How to run
 
+The main function `runAnalysis()` has 6 arguments.
+Please read the documentation with `?runAnalysis` for a detailed explanation.
+
 ```{r}
 library(Phase2.1NeuroRPackage)
 
-runAnalysis(mysite = 'penn', mask_thres = 10, blur_abs = 0,
-            data_dir = '../thrombotic-penn/data')
+runAnalysis(mysite = 'penn', mask_thres = 10, blur_abs = 0, include_race = TRUE,
+            out_dir = 'output', data_dir = '../thrombotic-penn/data')
 ```
 
 See your site obfuscation parameters [here](https://docs.google.com/spreadsheets/d/1Xl9juDBXt86P3xQtsoTaBl2zPl1BIiAG9DI3Rotyqp8/edit#gid=212461777).

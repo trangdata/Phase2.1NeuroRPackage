@@ -8,6 +8,7 @@ runAnalysis(
   mysite,
   mask_thres,
   blur_abs,
+  include_race = TRUE,
   out_dir = "output",
   data_dir = "Input"
 )
@@ -19,6 +20,9 @@ runAnalysis(
 
 \item{blur_abs}{Absolute max of obfuscation blurring range}
 
+\item{include_race}{Boolean. Whether race should be included
+in the regression model.}
+
 \item{out_dir}{Optional. Directory where resulting outputs are located.
 Defaults to 'output'.}
 
@@ -26,7 +30,7 @@ Defaults to 'output'.}
 Defaults to 'Input'.}
 }
 \value{
-
+NULL. Result files are written out to the `out_dir` directory.
 }
 \description{
 Run analysis

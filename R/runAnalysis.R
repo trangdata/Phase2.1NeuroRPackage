@@ -18,17 +18,20 @@
 #' @param mysite Your site acronym
 #' @param mask_thres Obfuscation small count mask threshold (e.g. 10)
 #' @param blur_abs Absolute max of obfuscation blurring range
+#' @param include_race Boolean. Whether race should be included
+#' in the regression model.
 #' @param out_dir Optional. Directory where resulting outputs are located.
 #' Defaults to 'output'.
 #' @param data_dir Optional. Directory where datasets are located.
 #' Defaults to 'Input'.
 #'
-#' @return
+#' @return NULL. Result files are written out to the `out_dir` directory.
+#'
 #' @export
 #' @import dplyr
 #' @importFrom stats cor glm lm median sd
 #' @importFrom forcats fct_recode fct_reorder
-#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyr pivot_longer pivot_wider replace_na
 #'
 #' @examples
 #'
@@ -36,6 +39,7 @@ runAnalysis <-
   function(mysite,
            mask_thres,
            blur_abs,
+           include_race = TRUE,
            out_dir = 'output',
            data_dir = 'Input') {
     # count mask threshold
@@ -453,22 +457,42 @@ runAnalysis <-
       arrange(desc(n_Total))
 
     ## -------------------------------------------------------------------------
-    severe_reg_elix <-
-      glm(
-        severe ~ neuro_post + elixhauser_score + sex + age_group + race,
-        data = scores_unique,
-        family = 'binomial'
-      )
-    deceased_reg_elix <-
-      glm(
-        deceased ~ neuro_post + elixhauser_score + sex + age_group + race,
-        data = scores_unique,
-        family = 'binomial'
-      )
+    if (include_race){
+      severe_reg_elix <-
+        glm(
+          severe ~ neuro_post + elixhauser_score + sex + age_group + race,
+          data = scores_unique,
+          family = 'binomial'
+        )
+      deceased_reg_elix <-
+        glm(
+          deceased ~ neuro_post + elixhauser_score + sex + age_group + race,
+          data = scores_unique,
+          family = 'binomial'
+        )
 
-    n_stay_reg_elix <-
-      lm(n_stay ~ neuro_post + elixhauser_score + race + sex + age_group,
-         data = scores_unique)
+      n_stay_reg_elix <-
+        lm(n_stay ~ neuro_post + elixhauser_score + race + sex + age_group,
+           data = scores_unique)
+    } else {
+      severe_reg_elix <-
+        glm(
+          severe ~ neuro_post + elixhauser_score + sex + age_group,
+          data = scores_unique,
+          family = 'binomial'
+        )
+      deceased_reg_elix <-
+        glm(
+          deceased ~ neuro_post + elixhauser_score + sex + age_group,
+          data = scores_unique,
+          family = 'binomial'
+        )
+
+      n_stay_reg_elix <-
+        lm(n_stay ~ neuro_post + elixhauser_score + sex + age_group,
+           data = scores_unique)
+    }
+
 
     ## ----save-results---------------------------------------------------------
     list_results_cpns = list(
@@ -497,7 +521,7 @@ runAnalysis <-
     site_results <- paste0(mysite, '_results')
     assign(site_results, results)
     save(list = site_results,
-         file = file.path(outdir, paste0(mysite, '-results.rda')))
+         file = file.path(out_dir, paste0(mysite, '-results.rda')))
 
 
   }
